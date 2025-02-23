@@ -1,0 +1,16 @@
+{
+  "name": "m2b-models",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "imports": {
+    "#*": "./src/*"
+  },
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {},
+  "dependencies": {
+    "m2b-utils": "workspace:*"
+  }
+}

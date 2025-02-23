@@ -1,0 +1,36 @@
+{
+  "name": "m2b-frontend",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "imports": {
+    "#*": "./src/*"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.66.9",
+    "@tanstack/react-router": "^1.109.2",
+    "@tanstack/router-devtools": "^1.109.2",
+    "@trpc/client": "11.0.0-rc.802",
+    "@trpc/tanstack-react-query": "11.0.0-rc.802",
+    "date-fns": "^4.1.0",
+    "jwt-decode": "^4.0.0",
+    "m2b-backend": "workspace:*",
+    "m2b-infra": "workspace:*",
+    "m2b-models": "workspace:*",
+    "m2b-utils": "workspace:*",
+    "mobx": "^6.13.6",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@tanstack/router-plugin": "^1.109.2",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "@vitejs/plugin-react": "^4.3.4"
+  }
+}
