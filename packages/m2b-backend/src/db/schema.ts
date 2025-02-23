@@ -49,6 +49,11 @@ export const sessionsTable = pgTable("sessions_table", {
   updatedAt: timestamp("updated_at")
     .notNull()
     .$onUpdate(() => new Date()),
+  
+  /**
+   * If logged out, active marks the session inactive.
+   */
+  active: boolean("active").notNull().default(true),
 });
 
 export type InsertSession = typeof sessionsTable.$inferInsert;

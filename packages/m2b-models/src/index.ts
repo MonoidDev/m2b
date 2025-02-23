@@ -13,7 +13,9 @@ export {
   AuthResult,
   LoggedOutKind,
   AccessTokenErrorKind,
-  AuthTokenRotateErrorKind,
+  SecureSessionErrorKind,
   AuthTokensRotate,
   AuthTokensRotateResult,
+  AuthTokensLogout,
+  AuthTokensLogoutResult,
 } from "./Auth";

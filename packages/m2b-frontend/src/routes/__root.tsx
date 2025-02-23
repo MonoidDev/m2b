@@ -50,6 +50,15 @@ function RootComponent() {
         >
           Login
         </Link>
+        {token.success && (
+          <a
+            onClick={async () => {
+              await AuthService.logout(token.data);
+            }}
+          >
+            Logout
+          </a>
+        )}
       </div>
       <hr />
       <div>{JSON.stringify(token)}</div>

@@ -3,6 +3,8 @@ import { authedProcedure, publicProcedure, router } from "#config/trpc.ts";
 import {
   AuthPassword,
   AuthResult,
+  AuthTokensLogout,
+  AuthTokensLogoutResult,
   AuthTokensRotate,
   AuthTokensRotateResult,
   UserView,
@@ -20,6 +22,11 @@ export const authRouter = router({
     .output(AuthTokensRotateResult)
     .mutation(async ({ input }): Promise<AuthTokensRotateResult> => {
       return await AuthService.rotateAuthTokens(input);
+    }),
+  logout: publicProcedure
+    .input(AuthTokensLogout)
+    .query(async ({ input }): Promise<AuthTokensLogoutResult> => {
+      return await AuthService.logout(input);
     }),
   getCurrentUser: authedProcedure()
     .output(UserView)

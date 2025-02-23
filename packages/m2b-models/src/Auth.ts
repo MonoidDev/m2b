@@ -43,17 +43,32 @@ export const AuthTokensRotate = z.object({
 
 export type AuthTokensRotate = z.infer<typeof AuthTokensRotate>;
 
-export const AuthTokenRotateErrorKind = z.enum([
+export const SecureSessionErrorKind = z.enum([
   "INVALID_USER_ID",
   "INVALID_REFRESH_TOKEN",
   "EXPIRED",
 ]);
 
-export type AuthTokenRotateErrorKind = z.infer<typeof AuthTokenRotateErrorKind>;
+export type SecureSessionErrorKind = z.infer<typeof SecureSessionErrorKind>;
 
 export const AuthTokensRotateResult = result(
   AuthTokens,
-  AuthTokenRotateErrorKind
+  SecureSessionErrorKind
 );
 
 export type AuthTokensRotateResult = z.infer<typeof AuthTokensRotateResult>;
+
+export const AuthTokensLogout = z.object({
+  userId: z.number(),
+  refreshToken: z.string(),
+  logoutAll: z.boolean(),
+});
+
+export type AuthTokensLogout = z.infer<typeof AuthTokensLogout>;
+
+export const AuthTokensLogoutResult = result(
+  z.literal(true),
+  SecureSessionErrorKind
+);
+
+export type AuthTokensLogoutResult = z.infer<typeof AuthTokensLogoutResult>;

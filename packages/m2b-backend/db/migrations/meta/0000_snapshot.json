@@ -1,5 +1,5 @@
 {
-  "id": "55e5415d-2cd4-43a0-9ee3-33160005f395",
+  "id": "cf6f8109-ec66-49cf-8c10-060229b8427e",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -108,6 +108,13 @@
           "type": "timestamp",
           "primaryKey": false,
           "notNull": true
+        },
+        "active": {
+          "name": "active",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
         }
       },
       "indexes": {},

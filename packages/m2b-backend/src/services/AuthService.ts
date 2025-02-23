@@ -1,5 +1,10 @@
 import { db } from "#db/index.ts";
-import { sessionsTable, usersTable, type SelectUser } from "#db/schema.ts";
+import {
+  sessionsTable,
+  usersTable,
+  type SelectSession,
+  type SelectUser,
+} from "#db/schema.ts";
 import { count, eq } from "drizzle-orm";
 import type {
   AuthPassword,
@@ -11,6 +16,9 @@ import type {
   AccessTokenErrorKind,
   AuthTokensRotateResult,
   AuthTokensRotate,
+  AuthTokensLogout,
+  AuthTokensLogoutResult,
+  SecureSessionErrorKind,
 } from "m2b-models";
 import bcrypt from "bcrypt";
 import { err, ok, type Result } from "m2b-utils";
@@ -20,7 +28,6 @@ import { addDays } from "date-fns";
 import { inject, Injector } from "#utils/inject.ts";
 import { TRPCError } from "@trpc/server";
 import { match } from "ts-pattern";
-import type {} from "../../../m2b-models/src/Auth";
 import { timingSafeEqual } from "node:crypto";
 
 export interface JwtClaims {
@@ -55,7 +62,7 @@ export class AuthService {
           userId: user.id,
           refreshToken: authTokens.refreshToken,
           expiresAt: authTokens.expiresAt,
-        })
+        });
 
         return ok(authTokens);
       } else {
@@ -160,10 +167,10 @@ export class AuthService {
     ).at(0)!;
   };
 
-  static rotateAuthTokens = async ({
-    userId,
-    refreshToken,
-  }: AuthTokensRotate): Promise<AuthTokensRotateResult> => {
+  static async securelyFindSession(
+    userId: number,
+    refreshToken: string
+  ): Promise<Result<SelectSession, SecureSessionErrorKind>> {
     const user = (
       await db.select().from(usersTable).where(eq(usersTable.id, userId))
     ).at(0);
@@ -189,6 +196,56 @@ export class AuthService {
       return err("EXPIRED");
     }
 
+    return ok(targetSession);
+  }
+
+  static logout = async ({
+    userId,
+    refreshToken,
+    logoutAll,
+  }: AuthTokensLogout): Promise<AuthTokensLogoutResult> => {
+    /**
+     * Validate the current session of the user
+     */
+    const currentSessionResult = await this.securelyFindSession(
+      userId,
+      refreshToken
+    );
+
+    if (!currentSessionResult.success) {
+      return currentSessionResult;
+    }
+
+    await db
+      .update(sessionsTable)
+      .set({
+        active: false,
+      })
+      .where(
+        logoutAll
+          ? eq(sessionsTable.userId, userId)
+          : eq(sessionsTable.id, currentSessionResult.data.id)
+      );
+
+    return ok(true);
+  };
+
+  static rotateAuthTokens = async ({
+    userId,
+    refreshToken,
+  }: AuthTokensRotate): Promise<AuthTokensRotateResult> => {
+    const targetSessionResult = await this.securelyFindSession(
+      userId,
+      refreshToken
+    );
+    if (!targetSessionResult.success) {
+      return targetSessionResult;
+    }
+
+    const user = (
+      await db.select().from(usersTable).where(eq(usersTable.id, userId))
+    ).at(0)!;
+
     const authTokens = await this.sign(user);
 
     await db
@@ -197,7 +254,7 @@ export class AuthService {
         refreshToken: authTokens.refreshToken,
         expiresAt: authTokens.expiresAt,
       })
-      .where(eq(sessionsTable.id, targetSession.id));
+      .where(eq(sessionsTable.id, targetSessionResult.data.id));
 
     return ok(authTokens);
   };
