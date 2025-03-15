@@ -1,9 +1,13 @@
-import { QueryClientProvider } from "@tanstack/react-query";
-import React, { Suspense } from "react";
-import { RouterProvider, createRouter } from "@tanstack/react-router";
-import { queryClient, trpc } from "#config/trpc.ts";
+import { Suspense } from "react";
 
-import { routeTree } from "./routeTree.gen";
+import { CssBaseline } from "@mui/material";
+import { ThemeProvider } from "@mui/material/styles";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { RouterProvider, createRouter } from "@tanstack/react-router";
+
+import { queryClient, trpc } from "#config/trpc.ts";
+import { routeTree } from "#routeTree.gen.ts";
+import { theme } from "#theme.ts";
 
 const router = createRouter({
   routeTree,
@@ -34,7 +38,10 @@ declare module "@tanstack/react-router" {
 export const App: React.FC = () => {
   return (
     <Suspense fallback={"loading"}>
-      <RouterProvider router={router} />
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <RouterProvider router={router} />
+      </ThemeProvider>
     </Suspense>
   );
 };

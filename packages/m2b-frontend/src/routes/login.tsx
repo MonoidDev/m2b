@@ -1,9 +1,10 @@
-import { queryClient } from "#config/trpc.ts";
-import { AuthService } from "#services/AuthService.ts";
 import { createFileRoute } from "@tanstack/react-router";
 import { LoggedOutKind } from "m2b-models";
 import { match } from "ts-pattern";
 import { z } from "zod";
+
+import { queryClient } from "#config/trpc.ts";
+import { AuthService } from "#services/AuthService.ts";
 
 export const Route = createFileRoute("/login")({
   component: LoginComponent,
@@ -48,7 +49,7 @@ function LoginComponent() {
                 .with({ success: false }, ({ error }) => {
                   alert(JSON.stringify(error));
                 })
-                .exhaustive()
+                .exhaustive(),
             );
 
             queryClient.resetQueries();

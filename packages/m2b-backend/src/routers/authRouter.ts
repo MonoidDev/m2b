@@ -1,14 +1,15 @@
-import { AuthService } from "#services/AuthService.ts";
-import { authedProcedure, publicProcedure, router } from "#config/trpc.ts";
+import type { AuthTokensLogoutResult } from "m2b-models";
 import {
   AuthPassword,
   AuthResult,
   AuthTokensLogout,
-  AuthTokensLogoutResult,
   AuthTokensRotate,
   AuthTokensRotateResult,
   UserView,
 } from "m2b-models";
+
+import { authedProcedure, publicProcedure, router } from "#config/trpc.ts";
+import { AuthService } from "#services/AuthService.ts";
 
 export const authRouter = router({
   loginWithAuthPassword: publicProcedure

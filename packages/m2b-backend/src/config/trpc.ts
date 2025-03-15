@@ -1,9 +1,10 @@
-import { AuthService } from "#services/AuthService.ts";
-import { inject, Injector, type InjectorContext } from "#utils/inject.ts";
 import { initTRPC, TRPCError } from "@trpc/server";
 import type { CreateHTTPContextOptions } from "@trpc/server/adapters/standalone";
 import type { UserRole } from "m2b-models";
 import { transformer } from "m2b-utils";
+
+import { AuthService } from "#services/AuthService.ts";
+import { inject, Injector, type InjectorContext } from "#utils/inject.ts";
 
 export interface Context {
   "~injectorContext": InjectorContext;
@@ -26,8 +27,8 @@ export const publicProcedure = t.procedure.use(async (opts) =>
   Injector.runWithContext(opts.ctx["~injectorContext"], () =>
     opts.next({
       ctx: opts.ctx,
-    })
-  )
+    }),
+  ),
 );
 
 export const authedProcedure = ({

@@ -1,5 +1,5 @@
-import { z } from "zod";
 import { result } from "m2b-utils";
+import { z } from "zod";
 
 export const AuthPassword = z.object({
   email: z.string(),
@@ -53,7 +53,7 @@ export type SecureSessionErrorKind = z.infer<typeof SecureSessionErrorKind>;
 
 export const AuthTokensRotateResult = result(
   AuthTokens,
-  SecureSessionErrorKind
+  SecureSessionErrorKind,
 );
 
 export type AuthTokensRotateResult = z.infer<typeof AuthTokensRotateResult>;
@@ -68,7 +68,7 @@ export type AuthTokensLogout = z.infer<typeof AuthTokensLogout>;
 
 export const AuthTokensLogoutResult = result(
   z.literal(true),
-  SecureSessionErrorKind
+  SecureSessionErrorKind,
 );
 
 export type AuthTokensLogoutResult = z.infer<typeof AuthTokensLogoutResult>;

@@ -2,7 +2,7 @@ import { z, type ZodTypeAny } from "zod";
 
 export const result = <T extends ZodTypeAny, E extends ZodTypeAny>(
   t: T,
-  e: E
+  e: E,
 ) => {
   return z.discriminatedUnion("success", [
     z.object({

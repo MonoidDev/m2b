@@ -1,8 +1,16 @@
-import { boolean, integer, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
+import {
+  boolean,
+  integer,
+  pgTable,
+  serial,
+  text,
+  timestamp,
+} from "drizzle-orm/pg-core";
 import { UserRole } from "m2b-models";
-import { pgEnum } from "./columns";
 
-export const userRoleEnum = pgEnum('role', UserRole)
+import { pgEnum } from "#db/columns.ts";
+
+export const userRoleEnum = pgEnum("role", UserRole);
 
 export const usersTable = pgTable("users_table", {
   id: serial("id").primaryKey(),
@@ -49,7 +57,7 @@ export const sessionsTable = pgTable("sessions_table", {
   updatedAt: timestamp("updated_at")
     .notNull()
     .$onUpdate(() => new Date()),
-  
+
   /**
    * If logged out, active marks the session inactive.
    */

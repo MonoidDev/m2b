@@ -1,11 +1,10 @@
-import { db } from "#db/index.ts";
-import {
-  sessionsTable,
-  usersTable,
-  type SelectSession,
-  type SelectUser,
-} from "#db/schema.ts";
+import { timingSafeEqual } from "node:crypto";
+
+import { TRPCError } from "@trpc/server";
+import bcrypt from "bcrypt";
+import { addDays } from "date-fns";
 import { count, eq } from "drizzle-orm";
+import jwt from "jsonwebtoken";
 import type {
   AuthPassword,
   AuthResult,
@@ -20,15 +19,18 @@ import type {
   AuthTokensLogoutResult,
   SecureSessionErrorKind,
 } from "m2b-models";
-import bcrypt from "bcrypt";
 import { err, ok, type Result } from "m2b-utils";
-import jwt from "jsonwebtoken";
-import { envs } from "#config/envs.ts";
-import { addDays } from "date-fns";
-import { inject, Injector } from "#utils/inject.ts";
-import { TRPCError } from "@trpc/server";
 import { match } from "ts-pattern";
-import { timingSafeEqual } from "node:crypto";
+
+import { envs } from "#config/envs.ts";
+import { db } from "#db/index.ts";
+import {
+  sessionsTable,
+  usersTable,
+  type SelectSession,
+  type SelectUser,
+} from "#db/schema.ts";
+import { inject, Injector } from "#utils/inject.ts";
 
 export interface JwtClaims {
   sub: string;
@@ -81,7 +83,7 @@ export class AuthService {
       accessToken: jwt.sign(
         { sub: `${user.id}`, role: user.role } satisfies JwtClaims,
         envs.SERVER_SECRET,
-        { expiresIn: "5m" }
+        { expiresIn: "5m" },
       ),
       refreshToken,
       expiresAt: addDays(new Date(), 7),
@@ -89,7 +91,7 @@ export class AuthService {
   }
 
   static async verify(
-    accessToken: string
+    accessToken: string,
   ): Promise<Result<JwtClaims, AccessTokenErrorKind>> {
     try {
       const claims = jwt.verify(accessToken, envs.SERVER_SECRET) as JwtClaims;
@@ -106,7 +108,7 @@ export class AuthService {
   }
 
   async createUser(
-    user: UserCreate
+    user: UserCreate,
   ): Promise<Result<SelectUser, UserCreateErrorKind>> {
     return await db.transaction(async (db) => {
       if (
@@ -169,7 +171,7 @@ export class AuthService {
 
   static async securelyFindSession(
     userId: number,
-    refreshToken: string
+    refreshToken: string,
   ): Promise<Result<SelectSession, SecureSessionErrorKind>> {
     const user = (
       await db.select().from(usersTable).where(eq(usersTable.id, userId))
@@ -185,7 +187,7 @@ export class AuthService {
       .where(eq(sessionsTable.userId, userId));
 
     const targetSession = sessions.find((s) =>
-      timingSafeEqual(Buffer.from(s.refreshToken), Buffer.from(refreshToken))
+      timingSafeEqual(Buffer.from(s.refreshToken), Buffer.from(refreshToken)),
     );
 
     if (!targetSession) {
@@ -209,7 +211,7 @@ export class AuthService {
      */
     const currentSessionResult = await this.securelyFindSession(
       userId,
-      refreshToken
+      refreshToken,
     );
 
     if (!currentSessionResult.success) {
@@ -224,7 +226,7 @@ export class AuthService {
       .where(
         logoutAll
           ? eq(sessionsTable.userId, userId)
-          : eq(sessionsTable.id, currentSessionResult.data.id)
+          : eq(sessionsTable.id, currentSessionResult.data.id),
       );
 
     return ok(true);
@@ -236,7 +238,7 @@ export class AuthService {
   }: AuthTokensRotate): Promise<AuthTokensRotateResult> => {
     const targetSessionResult = await this.securelyFindSession(
       userId,
-      refreshToken
+      refreshToken,
     );
     if (!targetSessionResult.success) {
       return targetSessionResult;

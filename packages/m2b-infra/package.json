@@ -10,11 +10,13 @@
     "#*": "./src/*"
   },
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./eslint-plugin": "./lib/eslint-plugin.ts"
   },
   "types": "./src/index.ts",
   "scripts": {},
   "dependencies": {
+    "@typescript-eslint/utils": "^8.26.1",
     "dotenv": "^16.4.7"
   }
 }

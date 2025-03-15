@@ -1,8 +1,9 @@
-import type { AppRouter } from "#index.ts";
-import { envs } from "#config/envs.ts";
-import { transformer } from "m2b-utils";
 import { createTRPCClient, httpBatchLink } from "@trpc/client";
 import type { AuthPassword } from "m2b-models";
+import { transformer } from "m2b-utils";
+
+import { envs } from "#config/envs.ts";
+import type { AppRouter } from "#index.ts";
 
 export const devClient = createTRPCClient<AppRouter>({
   links: [
@@ -15,9 +16,10 @@ export const devClient = createTRPCClient<AppRouter>({
 
 export const withAuthPassword = async (
   authPassword: AuthPassword,
-  fn: (client: typeof devClient) => Promise<void>
+  fn: (client: typeof devClient) => Promise<void>,
 ) => {
-  const authResult = await devClient.auth.loginWithAuthPassword.mutate(authPassword);
+  const authResult =
+    await devClient.auth.loginWithAuthPassword.mutate(authPassword);
 
   if (authResult.success) {
     await fn(
@@ -31,9 +33,9 @@ export const withAuthPassword = async (
             },
           }),
         ],
-      })
+      }),
     );
   } else {
-    console.error('Failed to authenticate', authResult.error);
+    console.error("Failed to authenticate", authResult.error);
   }
 };

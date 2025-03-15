@@ -1,4 +1,4 @@
-export function isConstructor(func: any): func is { new (): any } {
+export function isConstructor(func: unknown): func is { new (): unknown } {
   return (
     typeof func === "function" &&
     !!func.prototype &&

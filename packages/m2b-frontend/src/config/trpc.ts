@@ -1,17 +1,17 @@
+import { QueryClient } from "@tanstack/react-query";
 import { createTRPCClient, httpBatchLink, httpLink } from "@trpc/client";
 import { createTRPCOptionsProxy } from "@trpc/tanstack-react-query";
-import { QueryClient } from "@tanstack/react-query";
 import type { AppRouter } from "m2b-backend";
-import { envs } from "#config/envs.ts";
 import { transformer } from "m2b-utils";
-import { AuthService } from "#services/AuthService.ts";
 import { match } from "ts-pattern";
+
+import { envs } from "#config/envs.ts";
+import { AuthService } from "#services/AuthService.ts";
 
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       retry: false,
-      
     },
     mutations: {
       retry: false,

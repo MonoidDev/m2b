@@ -1,7 +1,9 @@
-import { AuthService } from "#services/AuthService.ts";
-import { createFileRoute, Outlet } from "@tanstack/react-router";
 import { useEffect } from "react";
+
+import { createFileRoute, Outlet } from "@tanstack/react-router";
 import { match } from "ts-pattern";
+
+import { AuthService } from "#services/AuthService.ts";
 
 export const Route = createFileRoute("/_authed")({
   component: AuthedComponent,

@@ -10,6 +10,5 @@
     ".": "./src/index.ts"
   },
   "scripts": {},
-  "dependencies": {
-  }
+  "dependencies": {}
 }

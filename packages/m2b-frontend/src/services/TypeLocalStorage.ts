@@ -1,10 +1,12 @@
-import { transformer } from "m2b-utils";
 import { useCallback, useEffect, useSyncExternalStore } from "react";
+
+import { transformer } from "m2b-utils";
 import type { ZodTypeAny } from "zod";
 
 type TypeLocalStorageSubscription = {
   t: ZodTypeAny;
   key: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   cb: (r: any) => void;
 };
 
@@ -32,8 +34,9 @@ export class TypeLocalStorage {
 
   static safeParseData<T extends ZodTypeAny>(
     t: T,
-    data: string | null
+    data: string | null,
   ): SafeParseType<T> {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return t.safeParse(data === null ? data : transformer.parse(data)) as any;
   }
 
@@ -54,7 +57,7 @@ export class TypeLocalStorage {
   static subscribe<T extends ZodTypeAny>(
     t: T,
     key: string,
-    cb: (r: SafeParseType<T>) => void
+    cb: (r: SafeParseType<T>) => void,
   ) {
     this.subscriptions.push({ t, key, cb });
 
@@ -80,7 +83,7 @@ export class TypeLocalStorage {
               console.error(
                 "Failed to call subscription on StorageEvent for key",
                 key,
-                e
+                e,
               );
             }
           }
@@ -105,7 +108,7 @@ export class TypeLocalStorage {
           onStorehange();
         });
       },
-      [t, key]
+      [t, key],
     );
 
     const getSnapshot = useCallback(() => {

@@ -4,28 +4,29 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "shit": "echo shirt"
+    "lint": "prettier . --check && NODE_ENV=production eslint"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "m2b-infra": "workspace:*",
     "superjson": "^2.2.2",
     "ts-pattern": "^5.6.2",
-    "zod": "^3.24.2",
-    "m2b-infra": "workspace:*"
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "esbuild": "^0.24.2",
-    "eslint": "^9.17.0",
+    "eslint": "^9.22.0",
     "eslint-import-resolver-typescript": "^3.7.0",
     "eslint-plugin-import-x": "^4.6.1",
     "globals": "^15.14.0",
+    "jiti": "^2.4.2",
     "prettier": "^3.4.2",
     "tsx": "4.19.3",
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.18.1",
     "vite": "^6.0.11"
   },
-  "packageManager": "pnpm@10.4.1"
+  "packageManager": "pnpm@10.6.3"
 }

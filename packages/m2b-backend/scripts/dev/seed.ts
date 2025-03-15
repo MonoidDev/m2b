@@ -8,7 +8,7 @@ import { AuthService } from "#services/AuthService.ts";
     await auth.createUser({
       email: "49445013@qq.ccom",
       password: "password",
-    })
+    }),
   );
 
   await db.$client.end();

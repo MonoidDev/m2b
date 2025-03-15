@@ -1,17 +1,18 @@
-import {
+import { differenceInSeconds } from "date-fns";
+import { jwtDecode } from "jwt-decode";
+import type {
   AuthPassword,
   AuthResult,
-  AuthTokens,
   AuthTokensLogoutResult,
   AuthTokensRotateResult,
   LoggedOutKind,
 } from "m2b-models";
-import { match } from "ts-pattern";
-import { TypeLocalStorage } from "./TypeLocalStorage";
-import { authTrpcClient } from "#config/trpc.ts";
+import { AuthTokens } from "m2b-models";
 import { err, ok, type Result } from "m2b-utils";
-import { jwtDecode } from "jwt-decode";
-import { differenceInSeconds } from "date-fns";
+import { match } from "ts-pattern";
+
+import { authTrpcClient } from "#config/trpc.ts";
+import { TypeLocalStorage } from "#services/TypeLocalStorage.ts";
 
 const AUTH_TOKENS_KEY = "AUTH_TOKENS_KEY";
 
@@ -70,7 +71,7 @@ export class AuthService {
   }
 
   static async logout(
-    authPassword: AuthTokens
+    authPassword: AuthTokens,
   ): Promise<AuthTokensLogoutResult> {
     const { userId } = this.parseAuthTokens(authPassword);
 
@@ -94,7 +95,7 @@ export class AuthService {
    * against a write-write race condition.
    */
   static async maybeRotateAuthTokens(
-    t: AuthTokens
+    t: AuthTokens,
   ): Promise<AuthTokensRotateResult> {
     const { refreshToken } = t;
     const exp = this.parseAuthTokens(t);
@@ -134,7 +135,7 @@ export class AuthService {
         })
         .otherwise(() => {
           console.error("Could not load auth tokens");
-        })
+        }),
     );
   }
 }

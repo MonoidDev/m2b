@@ -3,15 +3,12 @@ import { pgEnum as corePgEnum, type PgEnum } from "drizzle-orm/pg-core";
 import { type ZodEnum } from "zod";
 
 /**
- * 
- * @param enumName 
- * @param z 
+ *
+ * @param enumName
+ * @param z
  * @returns Converts a ZodEnum to a PgEnum
  */
-export const pgEnum = <
-  U extends string,
-  T extends [U, ...U[]],
->(
+export const pgEnum = <U extends string, T extends [U, ...U[]]>(
   enumName: string,
   z: ZodEnum<T>,
 ): PgEnum<Writable<T>> => {

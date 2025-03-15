@@ -17,9 +17,9 @@
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "date-fns": "^4.1.0",
-    "drizzle-kit": "^0.30.4",
+    "drizzle-kit": "^0.30.5",
     "drizzle-orm": "^0.39.3",
-    "json-joy": "^17.29.0",
+    "json-joy": "^17.31.0",
     "jsonwebtoken": "^9.0.2",
     "m2b-infra": "workspace:*",
     "m2b-models": "workspace:*",
@@ -33,7 +33,7 @@
     "@types/bcrypt": "^5.0.2",
     "@types/cors": "^2.8.17",
     "@types/jsonwebtoken": "^9.0.9",
-    "@types/node": "^22.13.5",
+    "@types/node": "^22.13.10",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4"
   }
