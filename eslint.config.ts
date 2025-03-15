@@ -1,4 +1,5 @@
 import eslint from "@eslint/js";
+import { globalIgnores } from "eslint/config";
 import eslintPluginImportX from "eslint-plugin-import-x";
 import globals from "globals";
 import * as tseslint from "typescript-eslint";
@@ -6,9 +7,7 @@ import * as tseslint from "typescript-eslint";
 import m2b from "m2b-infra/eslint-plugin";
 
 export default tseslint.config([
-  {
-    ignores: ["**/dist/"],
-  },
+  globalIgnores(["**/dist/"]),
   eslint.configs.recommended,
   tseslint.configs.recommended,
   eslintPluginImportX.flatConfigs.recommended,
